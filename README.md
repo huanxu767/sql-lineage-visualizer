@@ -1,7 +1,8 @@
 # Lineage Studio
 
 一个基于 [sqllineage](https://github.com/reata/sqllineage) 的本机 SQL 血缘可视化工具。Python 调用解析引擎，浏览器界面负责交互和绘图，数据只在本机处理。
-<img width="1716" height="885" alt="image" src="https://github.com/user-attachments/assets/c13c2c11-e099-43b4-8f11-e948c07a4ec3" />
+<img width="1783" height="969" alt="image" src="https://github.com/user-attachments/assets/c000fa29-c4b9-438a-ace3-9c8ba3a96d59" />
+
 
 ## 为什么选 Python + 本地 Web UI
 
