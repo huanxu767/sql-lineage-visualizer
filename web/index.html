@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lineage Studio · SQL 血缘分析</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div><strong>Lineage Studio</strong><small>SQL 数据血缘分析</small></div>
+        </div>
+        <div class="topbar-meta"><span class="live-dot"></span><span>本机分析引擎</span><span class="version">sqllineage</span></div>
+      </header>
+
+      <main class="workspace">
+        <section class="query-panel panel">
+          <div class="panel-heading">
+            <div><span class="eyebrow">QUERY WORKSPACE</span><h1>分析一段 SQL</h1></div>
+            <button id="sampleButton" class="ghost-button" type="button">载入示例</button>
+          </div>
+          <label class="field-label" for="dialect">SQL 方言</label>
+          <select id="dialect" class="select-input">
+            <option value="ansi">ANSI / 通用</option>
+            <option value="mysql">MySQL</option>
+            <option value="postgres">PostgreSQL</option>
+            <option value="hive">Hive</option>
+            <option value="spark">Spark SQL</option>
+          </select>
+          <label class="field-label sql-label" for="sqlInput">SQL 语句</label>
+          <div class="editor-wrap"><div class="line-numbers" id="lineNumbers">1</div><textarea id="sqlInput" spellcheck="false" placeholder="输入 INSERT、CREATE TABLE AS 或 SELECT ..."> </textarea></div>
+          <div class="query-actions"><span id="queryHint">支持多条 SQL 语句，以分号分隔</span><button id="analyzeButton" class="primary-button" type="button"><span class="button-icon">↗</span>开始分析</button></div>
+          <div id="errorBox" class="error-box" role="alert" hidden></div>
+        </section>
+
+        <section class="graph-panel panel">
+          <div class="panel-heading graph-heading">
+            <div><span class="eyebrow">LINEAGE MAP</span><h2>表级血缘关系</h2></div>
+            <div class="graph-tools"><button class="icon-button" id="zoomOut" title="缩小">−</button><button class="zoom-readout" id="zoomReadout">100%</button><button class="icon-button" id="zoomIn" title="放大">+</button><button class="fit-button" id="fitButton" type="button">适应画布</button></div>
+          </div>
+          <div class="legend"><span><i class="legend-dot source"></i>来源表</span><span><i class="legend-dot intermediate"></i>中间表</span><span><i class="legend-dot target"></i>目标表</span></div>
+          <div class="graph-viewport" id="graphViewport"><svg id="graphSvg" viewBox="0 0 900 500" role="img" aria-label="SQL 表级血缘图"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M 0 0 L 8 4 L 0 8 z" fill="#6684a5"></path></marker></defs><g id="graphLayer"></g></svg><div id="emptyState" class="empty-state"><div class="empty-icon">⌁</div><strong>等待分析</strong><span>输入 SQL 后，血缘关系会显示在这里</span></div></div>
+        </section>
+
+        <aside class="insights-panel">
+          <div class="stats-grid">
+            <div class="stat-card"><span>来源表</span><strong id="sourceCount">—</strong><i class="stat-accent blue"></i></div>
+            <div class="stat-card"><span>目标表</span><strong id="targetCount">—</strong><i class="stat-accent mint"></i></div>
+            <div class="stat-card"><span>中间表</span><strong id="intermediateCount">—</strong><i class="stat-accent violet"></i></div>
+            <div class="stat-card"><span>字段关系</span><strong id="columnCount">—</strong><i class="stat-accent amber"></i></div>
+          </div>
+          <section class="table-list-section panel">
+            <div class="section-title"><h2>涉及的数据表</h2><span id="tableCount">0 张</span></div>
+            <div id="tableList" class="table-list"><div class="list-placeholder">分析完成后显示表清单</div></div>
+          </section>
+        </aside>
+
+        <section class="columns-panel panel">
+          <div class="section-title"><div><span class="eyebrow">COLUMN LINEAGE</span><h2>字段级血缘</h2></div><span id="columnSummary">—</span></div>
+          <div class="column-table-wrap"><table><thead><tr><th>来源字段</th><th></th><th>目标字段</th></tr></thead><tbody id="columnBody"><tr><td colspan="3" class="list-placeholder">运行分析后显示字段映射</td></tr></tbody></table></div>
+        </section>
+      </main>
+      <footer><span>Powered by sqllineage</span><span>数据仅在本机处理，不会上传</span></footer>
+    </div>
+    <script src="/app.js"></script>
+  </body>
+</html>
